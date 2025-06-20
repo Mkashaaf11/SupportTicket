@@ -1,4 +1,6 @@
 using SupportTicket.Models;
+using System.Collections.Generic;
+using System.Linq;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
@@ -20,6 +22,12 @@ var tickets = new List<Ticket>
 app.MapGet("api/getTickets", () => { 
 
 return Results.Ok(tickets);
+});
+
+app.MapGet("api/getTickets/{id}", (int id) =>
+{
+    var ticket = tickets.FirstOrDefault(t => t.Id == id);
+    return ticket != null ? Results.Ok(ticket) : Results.NotFound(new { message = $"Ticket with {id} not found" });
 });
 
 app.Run();
