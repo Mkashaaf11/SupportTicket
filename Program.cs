@@ -30,4 +30,27 @@ app.MapGet("api/getTickets/{id}", (int id) =>
     return ticket != null ? Results.Ok(ticket) : Results.NotFound(new { message = $"Ticket with {id} not found" });
 });
 
+app.MapGet("api/tickets", (string? status) => {
+
+    List<Ticket> filtered = new List<Ticket>();
+    if (string.IsNullOrWhiteSpace(status))
+    {
+        filtered = tickets;
+    }
+    else
+    {
+
+        foreach(var ticket in tickets)
+        {
+            if( ticket.Status.Equals(status, StringComparison.OrdinalIgnoreCase)){
+                filtered.Add(ticket);
+            }
+        }
+
+    }
+
+    return Results.Ok(filtered);
+
+});
+
 app.Run();
